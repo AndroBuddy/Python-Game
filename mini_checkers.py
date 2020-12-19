@@ -95,22 +95,28 @@ def player_move():
         print("Invalid Position, please enter again.")
         player_move() # Recursion
 
-    counter = 1 # Counter for pawns in a column
+    counter = 0 # Counter for pawns in a column
     r = 5 # Default r value to 5 (Start value for player)
 
     # Check if there are multiple pawns same column
     for i in range(6):
         if choice == "red":
-            if board[i - 1][pawn - 1] == 'x':
+            if board[i - 1][pawn - 1] == colors.RED + 'x' + colors.DEF:
                 counter += 1
         if choice == "blue":
-            if board[i - 1][pawn - 1] == 'o':
+            if board[i - 1][pawn - 1] == colors.BLUE + 'o' + colors.DEF:
                 counter += 1
 
-    # If count of pawns in the column is 2 or more prompt the user to choose which pawn to move by fetching the row index
-    if counter > 1:
-        r = input("You have more than one checker piece in this column, pick one to move: ")
-    
+    # If number of pawns in the column is 2 or more, prompt the user to choose which pawn to move by fetching the row index
+    if counter > 0:
+        def multi_pawn():
+            row = int(input("You have %i checker pieces in this column, pick one to move (Count from bottom): " % counter))
+            if row > counter:
+                print("You chose a position with no pawn, try again")
+                multi_pawn() # Recursion
+            r = 6 - row
+        multi_pawn()
+
     # If counter is 1 fetch the r value
     if counter == 1:
         for i in range(6):
@@ -134,7 +140,7 @@ def player_move():
                 board[r - 1][pawn] = colors.RED + board[r][pawn - 1] + colors.DEF
                 board[r][pawn - 1] = colors.DEF + '-'
             else:
-                print("Sorry, invalid position to move")
+                print("Sorry, invalid position to move.\n")
                 red_move() # Recursion
         red_move()
 
@@ -150,7 +156,7 @@ def player_move():
                 board[r - 1][pawn] = colors.BLUE + board[r][pawn - 1] + colors.DEF
                 board[r][pawn - 1] = colors.DEF + '-'
             else:
-                print("Sorry, invalid position to move.")
+                print("Sorry, invalid position to move.\n")
                 blue_move() # Recursion
         blue_move()
 
