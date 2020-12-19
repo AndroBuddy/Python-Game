@@ -43,7 +43,7 @@ def board_show():
     print()
 
 # Initial board setup
-def board_reset():
+def board_reset(choice):
     for i in range(6):
         for j in range(6):
             if choice == "blue":
@@ -65,9 +65,10 @@ def check(choice):
     else:
         choice = input("Invalid color selection, please enter correct choice: ").lower()
         check(choice) # Recursion
+    return choice
 
-check(choice)
-board_reset()
+choice = check(choice)
+board_reset(choice)
 board_show()
 
 # Out of bounds validator to check if checker moves out from board
