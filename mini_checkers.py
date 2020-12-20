@@ -1,4 +1,6 @@
 import time
+import os 
+import ai
 
 # Welcome message :)
 print("Welcome to Python Mini Checkers!\n")
@@ -42,6 +44,8 @@ def board_show():
 
     print()
 
+    return board
+
 # Initial board setup
 def board_reset(choice):
     for i in range(6):
@@ -73,19 +77,25 @@ board_show()
 
 # Out of bounds validator to check if checker moves out from board
 # We fetch pawn for the column indexing
-def out_of_bounds(pos, pawn, r):
+def out_of_bounds(pos, pawn, r):                                               
     if pos == "left":
         if pawn == 1:
             print("You can't move your pawn outside the board!\nAuto moving right ...")
             pos = "right"
-        if choice == "red":
-            if board[r - 1][pawn - 2] == colors.RED + 'x' + colors.DEF:
-                print("You can't move your pawn here! Moving to the right.")
-                pos = "right"
+        if choice == "red":                                                                 ########## ADDED TRY BLOCK , THE PAWN VALUE SOMETIMES EXCEED 6 OR BECOMES LESS THAN 0
+            try:
+                if board[r - 1][pawn - 2] == colors.RED + 'x' + colors.DEF:
+                    print("You can't move your pawn here! Moving to the right.")
+                    pos = "right"
+            except:
+                pass
         if choice == "blue":
-            if board[r - 1][pawn - 2] == colors.BLUE + 'o' + colors.DEF:
-                print("You can't move your pawn here! Moving to the right.")
-                pos = "right"
+            try:
+                if board[r - 1][pawn - 2] == colors.BLUE + 'o' + colors.DEF:
+                    print("You can't move your pawn here! Moving to the right.")
+                    pos = "right"
+            except:
+                pass
         return pos
 
     if pos == "right":
@@ -93,13 +103,22 @@ def out_of_bounds(pos, pawn, r):
             print("You can't move your pawn outside the board!\nAuto moving left ...")
             pos = "left"
         if choice == "red":
-            if board[r - 1][pawn] == colors.RED + 'x' + colors.DEF:
-                print("You can't move your pawn here! Moving to the left.")
-                pos = "left"
+            try:
+                if board[r - 1][pawn] == colors.RED + 'x' + colors.DEF:
+                    print("You can't move your pawn here! Moving to the left.")
+                    pos = "left"
+
+            except:
+                pass
+
         if choice == "blue":
-            if board[r - 1][pawn] == colors.BLUE + 'o' + colors.DEF:
-                print("You can't move your pawn here! Moving to the left.")
-                pos = "left"
+            try:
+                if board[r - 1][pawn] == colors.BLUE + 'o' + colors.DEF:
+                    print("You can't move your pawn here! Moving to the left.")
+                    pos = "left"
+            except:
+                pass
+
         return pos
 
 # Check whether the move allows player to kill opponent pawn
@@ -170,12 +189,12 @@ def player_move():
     r = 5 # Default r value to 5 (Start value for player)
 
     # Check if there are multiple pawns same column
-    for i in range(6):
+    for i in range(6):                                                              #### i SHOULD bE ZERO I GUESS , LET'S SEE
         if choice == "red":
-            if board[i - 1][pawn - 1] == colors.RED + 'x' + colors.DEF:
+            if board[i][pawn - 1] == colors.RED + 'x' + colors.DEF:
                 counter += 1
         if choice == "blue":
-            if board[i - 1][pawn - 1] == colors.BLUE + 'o' + colors.DEF:
+            if board[i][pawn - 1] == colors.BLUE + 'o' + colors.DEF:
                 counter += 1
 
     # If number of pawns in the column is 2 or more, prompt the user to choose which pawn to move by fetching the row index
@@ -281,5 +300,5 @@ def player_move():
         blue_move()
 
 print("The game will begin now ...\n")
-player_move()
-board_show()
+# player_move()
+# board_show()
