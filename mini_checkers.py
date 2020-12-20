@@ -72,28 +72,99 @@ board_reset(choice)
 board_show()
 
 # Out of bounds validator to check if checker moves out from board
-# We fetch c for the column indexing
-def out_of_bounds(pos, c):
+# We fetch pawn for the column indexing
+def out_of_bounds(pos, pawn, r):
     if pos == "left":
-        if c == 0:
+        if pawn == 1:
             print("You can't move your pawn outside the board!\nAuto moving right ...")
             pos = "right"
+        if choice == "red":
+            if board[r - 1][pawn - 2] == colors.RED + 'x' + colors.DEF:
+                print("You can't move your pawn here! Moving to the right.")
+                pos = "right"
+        if choice == "blue":
+            if board[r - 1][pawn - 2] == colors.BLUE + 'o' + colors.DEF:
+                print("You can't move your pawn here! Moving to the right.")
+                pos = "right"
         return pos
 
     if pos == "right":
-        if c == 5:
+        if pawn == 6:
             print("You can't move your pawn outside the board!\nAuto moving left ...")
             pos = "left"
+        if choice == "red":
+            if board[r - 1][pawn] == colors.RED + 'x' + colors.DEF:
+                print("You can't move your pawn here! Moving to the left.")
+                pos = "left"
+        if choice == "blue":
+            if board[r - 1][pawn] == colors.BLUE + 'o' + colors.DEF:
+                print("You can't move your pawn here! Moving to the left.")
+                pos = "left"
         return pos
+
+# Check whether the move allows player to kill opponent pawn
+def kill_check(pos, pawn, r):
+    kill_count = 0
+    if pos == "left":
+        if choice == "red":
+            if r - 2 >= 0 and pawn - 3 >= 0:
+                if board[r - 1][pawn - 2] == colors.BLUE + 'o' + colors.DEF and board[r - 2][pawn - 3] == '-':
+                    print("You scored a point by eliminating your opponent's pawn!")
+                    kill_count += 1
+        if choice == "blue":
+            if r - 2 >= 0 and pawn - 3 >= 0:
+                if board[r - 1][pawn - 2] == colors.RED + 'x' + colors.DEF and board[r - 2][pawn - 3] == '-':
+                    print("You scored a point by eliminating your opponent's pawn!")
+                    kill_count += 1
+        return kill_count
+
+    if pos == "right":
+        if choice == "red":
+            if r - 2 >= 0 and pawn + 1 <= 5:
+                if board[r - 1][pawn] == colors.BLUE + 'o' + colors.DEF and board[r - 2][pawn + 1] == '-':
+                    print("You scored a point by eliminating your opponent's pawn!")
+                    kill_count += 1
+        if choice == "blue":
+            if r - 2 >= 0 and pawn + 1 <= 5:
+                if board[r - 1][pawn] == colors.RED + 'x' + colors.DEF and board[r - 2][pawn + 1] == '-':
+                    print("You scored a point by eliminating your opponent's pawn!")
+                    kill_count += 1
+        return kill_count
+
+def kill_move(pos, pawn, r):
+    r -= 1
+    if choice == "red":
+        if pos == "left":
+            pawn -= 1
+            board[r - 1][pawn - 2] = colors.RED + board[r][pawn - 1] + colors.DEF
+            board[r][pawn - 1] = colors.DEF + '-'
+        if pos == "right":
+            pawn += 1
+            board[r - 1][pawn] = colors.RED + board[r][pawn - 1] + colors.DEF
+            board[r][pawn - 1] = colors.DEF + '-'
+
+    if choice == "blue":
+        if pos == "left":
+            pawn -= 1
+            board[r - 1][pawn - 2] = colors.BLUE + board[r][pawn - 1] + colors.DEF
+            board[r][pawn - 1] = colors.DEF + '-'
+        if pos == "right":
+            pawn += 1
+            board[r - 1][pawn] = colors.BLUE + board[r][pawn - 1] + colors.DEF
+            board[r][pawn - 1] = colors.DEF + '-'
 
 # Function to get input from player for checker to move
 def player_move():
-    pawn = int(input("Pawn column number: "))
+    def pawn_prompt():
+        pawn = int(input("Pawn column number: "))
 
-    # Check whether the pawn column selection is more than 6
-    if pawn >= 7 :
-        print("Invalid Position, please enter again.")
-        player_move() # Recursion
+        # Check whether the pawn column selection is more than 6
+        if pawn >= 7 :
+            print("Invalid Position, please enter again.")
+            pawn_prompt() # Recursion
+
+        return pawn
+    pawn = pawn_prompt()
 
     counter = 0 # Counter for pawns in a column
     r = 5 # Default r value to 5 (Start value for player)
@@ -108,14 +179,21 @@ def player_move():
                 counter += 1
 
     # If number of pawns in the column is 2 or more, prompt the user to choose which pawn to move by fetching the row index
-    if counter > 0:
+    if counter > 1:
         def multi_pawn():
             row = int(input("You have %i checker pieces in this column, pick one to move (Count from bottom): " % counter))
-            if row > counter:
+            if board[6 - row][pawn - 1] == '-':
                 print("You chose a position with no pawn, try again")
                 multi_pawn() # Recursion
-            r = 6 - row
-        multi_pawn()
+            if choice == "red" and board[6 - row][pawn - 1] == colors.BLUE + 'o' + colors.DEF:
+                print("You chose a position with no pawn, try again")
+                multi_pawn() # Recursion
+            if choice == "blue" and board[6 - row][pawn - 1] == colors.RED + 'x' + colors.DEF:
+                print("You chose a position with no pawn, try again")
+                multi_pawn() # Recursion
+            return row
+        row = multi_pawn()
+        r = 6 - row
 
     # If counter is 1 fetch the r value
     if counter == 1:
@@ -130,15 +208,36 @@ def player_move():
     # After passing previous validation, proceed with movement side selection - left or right
     # Team RED
     if choice == "red":
+        if pawn < 6 and pawn > 1:
+            if board[r - 1][pawn] == colors.RED + 'x' + colors.DEF and board[r - 1][pawn - 2] == colors.RED + 'x' + colors.DEF:
+                print("\nYou can't move this pawn! Try choosing another one.")
+                pawn = pawn_prompt()
+
+        if pawn == 6:
+            if board[r - 1][pawn - 2] == colors.RED + 'x' + colors.DEF:
+                print("\nYou can't move this pawn! Try choosing another one.")
+                pawn = pawn_prompt()
+
+        if pawn == 1:
+            if board[r - 1][pawn - 1] == colors.RED + 'x' + colors.DEF:
+                print("\nYou can't move this pawn! Try choosing another one.")
+                pawn = pawn_prompt()
+
         def red_move():
             pos = input("Move left or right? ")
-            pos = out_of_bounds(pos, pawn - 1)
+            pos = out_of_bounds(pos, pawn, r)
             if pos == "left":
+                kcount = kill_check(pos, pawn, r)
                 board[r - 1][pawn - 2] = colors.RED + board[r][pawn - 1] + colors.DEF
                 board[r][pawn - 1] = colors.DEF + '-'
+                if kcount == 1:
+                    kill_move(pos, pawn, r)
             elif pos == "right":
+                kcount = kill_check(pos, pawn, r)
                 board[r - 1][pawn] = colors.RED + board[r][pawn - 1] + colors.DEF
                 board[r][pawn - 1] = colors.DEF + '-'
+                if kcount == 1:
+                    kill_move(pos, pawn, r)
             else:
                 print("Sorry, invalid position to move.\n")
                 red_move() # Recursion
@@ -146,15 +245,36 @@ def player_move():
 
     # Team BLUE
     if choice == "blue":
+        if pawn < 6 and pawn > 1:
+            if board[r - 1][pawn] == colors.BLUE + 'o' + colors.DEF and board[r - 1][pawn - 2] == colors.BLUE + 'o' + colors.DEF:
+                print("\nYou can't move this pawn! Try choosing another one.")
+                pawn = pawn_prompt()
+
+        if pawn == 6:
+            if board[r - 1][pawn - 2] == colors.BLUE + 'o' + colors.DEF:
+                print("\nYou can't move this pawn! Try choosing another one.")
+                pawn = pawn_prompt()
+
+        if pawn == 1:
+            if board[r - 1][pawn - 1] == colors.BLUE + 'o' + colors.DEF:
+                print("\nYou can't move this pawn! Try choosing another one.")
+                pawn = pawn_prompt()
+
         def blue_move():
             pos = input("Move left or right? ")
-            pos = out_of_bounds(pos, pawn - 1)
+            pos = out_of_bounds(pos, pawn, r)
             if pos == "left":
+                kcount = kill_check(pos, pawn, r)
                 board[r - 1][pawn - 2] = colors.BLUE + board[r][pawn - 1] + colors.DEF
                 board[r][pawn - 1] = colors.DEF + '-'
+                if kcount == 1:
+                    kill_move(pos, pawn, r)
             elif pos == "right":
+                kcount = kill_check(pos, pawn, r)
                 board[r - 1][pawn] = colors.BLUE + board[r][pawn - 1] + colors.DEF
                 board[r][pawn - 1] = colors.DEF + '-'
+                if kcount == 1:
+                    kill_move(pos, pawn, r)
             else:
                 print("Sorry, invalid position to move.\n")
                 blue_move() # Recursion
