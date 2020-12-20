@@ -24,6 +24,7 @@ choice = input("Select your color side (" + colors.RED + "Red" + " " + colors.BL
 
 # Define function to show the checkerboard
 def board_show():
+    global board
     print("The checkerboard currently: \n")
 
     # Numbering columns in the top (Computer side)
@@ -48,6 +49,7 @@ def board_show():
 
 # Initial board setup
 def board_reset(choice):
+    global board
     for i in range(6):
         for j in range(6):
             if choice == "blue":
@@ -60,6 +62,7 @@ def board_reset(choice):
 
 # Validate input and assign starting priority
 def check(choice):
+    global board
     if choice == "red":
         print("\nYou chose red, " + colors.RED + "x" + colors.DEF)
 
@@ -77,7 +80,8 @@ board_show()
 
 # Out of bounds validator to check if checker moves out from board
 # We fetch pawn for the column indexing
-def out_of_bounds(pos, pawn, r):                                               
+def out_of_bounds(pos, pawn, r):  
+    global board                                             
     if pos == "left":
         if pawn == 1:
             print("You can't move your pawn outside the board!\nAuto moving right ...")
@@ -123,6 +127,7 @@ def out_of_bounds(pos, pawn, r):
 
 # Check whether the move allows player to kill opponent pawn
 def kill_check(pos, pawn, r):
+    global board
     kill_count = 0
     if pos == "left":
         if choice == "red":
@@ -151,6 +156,7 @@ def kill_check(pos, pawn, r):
         return kill_count
 
 def kill_move(pos, pawn, r):
+    global board
     r -= 1
     if choice == "red":
         if pos == "left":
@@ -174,7 +180,9 @@ def kill_move(pos, pawn, r):
 
 # Function to get input from player for checker to move
 def player_move():
+    global board
     def pawn_prompt():
+        global board
         pawn = int(input("Pawn column number: "))
 
         # Check whether the pawn column selection is more than 6
@@ -189,17 +197,25 @@ def player_move():
     r = 5 # Default r value to 5 (Start value for player)
 
     # Check if there are multiple pawns same column
-    for i in range(6):                                                              #### i SHOULD bE ZERO I GUESS , LET'S SEE
+    for i in range(6):                                                        #### i SHOULD bE ZERO I GUESS , LET'S SEE
+        # print(counter)
         if choice == "red":
+            print (counter)
             if board[i][pawn - 1] == colors.RED + 'x' + colors.DEF:
-                counter += 1
+                counter =counter + 1
+                # print(counter)
+
         if choice == "blue":
             if board[i][pawn - 1] == colors.BLUE + 'o' + colors.DEF:
                 counter += 1
 
+    print("PRINTS IT HERE" , counter)
+    board_show()
+
     # If number of pawns in the column is 2 or more, prompt the user to choose which pawn to move by fetching the row index
     if counter > 1:
         def multi_pawn():
+            global board
             row = int(input("You have %i checker pieces in this column, pick one to move (Count from bottom): " % counter))
             if board[6 - row][pawn - 1] == '-':
                 print("You chose a position with no pawn, try again")
@@ -243,6 +259,7 @@ def player_move():
                 pawn = pawn_prompt()
 
         def red_move():
+            global board
             pos = input("Move left or right? ")
             pos = out_of_bounds(pos, pawn, r)
             if pos == "left":
@@ -280,6 +297,7 @@ def player_move():
                 pawn = pawn_prompt()
 
         def blue_move():
+            global board
             pos = input("Move left or right? ")
             pos = out_of_bounds(pos, pawn, r)
             if pos == "left":
