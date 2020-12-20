@@ -1,5 +1,5 @@
 import time
-
+import random
 
 class colors:
     RED = '\u001b[31m'
@@ -8,12 +8,6 @@ class colors:
 
 
 
-
-
-
-
-
-import random
 def ai_choice(choice):
     if choice == "red":
         return "RED"
