@@ -8,6 +8,8 @@ class colors:
 
 
 
+
+
 def ai_choice(choice):
     if choice == "red":
         return "RED"
