@@ -56,6 +56,8 @@ def movement_kill_check(choice , board):
                         continue
                     
                     elif board[i+1][j-1] == colors.RED+ 'x' + colors.DEF and board[i+2][j-2] == colors.DEF + '-':
+                        if j-1 < 0 or j-2<0:
+                            continue
                         board[i][j] = colors.DEF + '-'
                         board[i+1][j-1] = colors.DEF + '-'
                         board[i+2][j-2] = colors.BLUE + 'o' + colors.DEF
@@ -72,6 +74,8 @@ def movement_kill_check(choice , board):
                         continue
                     
                     elif board[i+1][j-1] == colors.BLUE + 'o' + colors.DEF and board[i+2][j-2] == colors.DEF + '-':
+                        if j-1 < 0 or j-2 < 0:
+                            continue
                         board[i][j] = colors.DEF + '-'
                         board[i+1][j-1] = colors.DEF + '-'
                         board[i+2][j-2] = colors.RED + 'x' + colors.DEF
@@ -90,7 +94,7 @@ def movement_kill_check(choice , board):
                     board[i][0] = colors.DEF + '-'
                     board[i+1][1] = colors.BLUE+ 'o' + colors.DEF
                     update = True
-                    continue
+                    # continue
                 
                 elif j == 5 and board[i+1][4]==colors.DEF + '-':
                     board[i][5] = colors.DEF + '-'
@@ -100,6 +104,8 @@ def movement_kill_check(choice , board):
 
                 elif board[i][j] == colors.BLUE+ 'o' + colors.DEF :
                     ch = random.choice([-1 , 1])
+                    if j+ch < 0 :
+                        continue
                     if board[i+1][j+ch] == colors.DEF + '-':
                         board[i][j] = colors.DEF + '-'
                         board[i+1][j+ch] = colors.BLUE+ 'o' + colors.DEF
@@ -125,6 +131,8 @@ def movement_kill_check(choice , board):
 
                 elif board[i][j] == colors.RED+ 'x' + colors.DEF :
                     ch = random.choice([-1 , 1])
+                    if j+ch < 0 : 
+                        continue
                     if board[i+1][j+ch] == colors.DEF + '-':
                         board[i][j] = colors.DEF + '-'
                         board[i+1][j+ch] = colors.RED+ 'x' + colors.DEF
@@ -153,61 +161,62 @@ def movement_kill_check(choice , board):
 #         [colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-']]
 
 
-board= [[colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-'],
-        [colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-'],
-        [colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.RED + 'x' + colors.DEF, colors.DEF + '-', colors.DEF + '-'],
-        [colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-'],
-        [colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-'],
-        [colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-']]
+# board= [[colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-'],
+#         [colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-'],
+#         [colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.RED + 'x' + colors.DEF, colors.DEF + '-', colors.DEF + '-'],
+#         [colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-'],
+#         [colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-'],
+#         [colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-']]
 
 
 
 
-def board_reset(choice):
-    global board
-    for i in range(6):
-        for j in range(6):
-            if choice == "blue":
-                board[0][j] = colors.RED + 'x' + colors.DEF
-                board[5][j] = colors.BLUE + 'o' + colors.DEF
+# def board_reset(choice):
+#     global board
+#     for i in range(6):
+#         for j in range(6):
+#             if choice == "blue":
+#                 board[0][j] = colors.RED + 'x' + colors.DEF
+#                 board[5][j] = colors.BLUE + 'o' + colors.DEF
 
-            if choice == "red":
-                board[0][j] = colors.BLUE + 'o' + colors.DEF
-                board[5][j] = colors.RED + 'x' + colors.DEF
-
-
-
-def board_show(board):
-    print("The checkerboard currently: \n")
-
-    # Numbering columns in the top (Computer side)
-    for i in range(6):
-        print(i + 1, end='  ')
-
-    print()
-
-    # Main board
-    for i in range(6):
-        for j in range(6):
-            print(board[i][j], end='  ')
-        print()
-
-    # Numbering columns in the bottom (User side)
-    for i in range(6):
-        print(i + 1, end='  ')
-
-    print()
+#             if choice == "red":
+#                 board[0][j] = colors.BLUE + 'o' + colors.DEF
+#                 board[5][j] = colors.RED + 'x' + colors.DEF
 
 
 
-choice = "red"
-board_reset(choice)
-board_show(board)
+# def board_show(board):
+#     print("The checkerboard currently: \n")
 
-board1 = board
-for i in range(20):
+#     # Numbering columns in the top (Computer side)
+#     for i in range(6):
+#         print(i + 1, end='  ')
 
-    board1 = board_update(choice , board1)
-    time.sleep(2)
-    board_show(board1)
+#     print()
+
+#     # Main board
+#     for i in range(6):
+#         for j in range(6):
+#             print(board[i][j], end='  ')
+#         print()
+
+#     # Numbering columns in the bottom (User side)
+#     for i in range(6):
+#         print(i + 1, end='  ')
+
+#     print()
+
+
+
+# choice = "red"
+# board_reset(choice)
+# board_show(board)
+
+# board1 = board
+
+# for i in range(10):
+
+#     board1 = board_update(choice , board1)
+#     time.sleep(2)
+#     board_show(board1)
 

@@ -1,13 +1,70 @@
-import mini_checkers as m
+# import mini_checkers as m1
+import mini as m
 import ai
+import os , time
 
-count = 0
-while count <5 :
-    m.player_move()
-    # m.board_show()
-    print("THIS ONE IS DRIVER")
+class colors:
+    RED = '\u001b[31m'
+    BLUE = '\u001b[34m'
+    DEF = '\033[0m'
+
+
+board= [[colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-'],
+        [colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-'],
+        [colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-'],
+        [colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-'],
+        [colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-'],
+        [colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-']]
+
+
+print("BE SURE , YOU CANNOT MOVE BACKWARDS , SO CHOOSE YOUR MOVE WISELY !!!!!!!!!")
+
+choice = ""
+
+def board_reset(choice):
+    global board
     for i in range(6):
         for j in range(6):
-            print(m.board[i][j], end='  ')
-        print()
-    count = count+1
+            if choice == "blue":
+                board[0][j] = colors.RED + 'x' + colors.DEF
+                board[5][j] = colors.BLUE + 'o' + colors.DEF
+
+            if choice == "red":
+                board[0][j] = colors.BLUE + 'o' + colors.DEF
+                board[5][j] = colors.RED + 'x' + colors.DEF
+
+
+
+
+while True:
+    choice = input("Select your color side (" + colors.RED + "Red" + " " + colors.BLUE + "Blue" + colors.DEF + ") --> ").lower()
+    if choice == "red" or choice == "blue":
+        board_reset(choice)
+        break
+    else:
+        print("Choose Red or Blue")
+
+
+m.board_show(board)
+
+
+count = 0
+
+
+while count <5 :
+    count = count + 1
+
+    print("YOUR TURN")
+    board = m.player_board(choice , board)
+    print("COMPUTER IS THINKING ... ")
+    time.sleep(2)
+    board = ai.board_update(choice , board)
+    print("COMPUTER IS DONW WITH IT'S TURN")
+
+    m.board_show(board)
+
+
+
+
+
+    
