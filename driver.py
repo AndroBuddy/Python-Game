@@ -17,6 +17,10 @@ board= [[colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-',
         [colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-']]
 
 
+if (os.name == "nt"):
+    os.system("cls")
+if (os.name =="posix"):
+    os.system("clear")
 print("BE SURE , YOU CANNOT MOVE BACKWARDS , SO CHOOSE YOUR MOVE WISELY !!!!!!!!!")
 
 choice = ""
@@ -56,9 +60,14 @@ while count <5 :
 
     print("YOUR TURN")
     board = m.player_board(choice , board)
+
+    if (os.name == "nt"):
+        os.system("cls")
+    if (os.name =="posix"):
+        os.system("clear")
     print("COMPUTER IS THINKING ... ")
     time.sleep(2)
     board = ai.board_update(choice , board)
-    print("COMPUTER IS DONW WITH IT'S TURN")
+    print("COMPUTER IS DONE WITH IT'S TURN")
 
     m.board_show(board)
