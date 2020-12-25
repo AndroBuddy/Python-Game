@@ -8,14 +8,12 @@ class colors:
     BLUE = '\u001b[34m'
     DEF = '\033[0m'
 
-
 board= [[colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-'],
         [colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-'],
         [colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-'],
         [colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-'],
         [colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-'],
         [colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-']]
-
 
 if (os.name == "nt"):
     os.system("cls")
@@ -37,9 +35,6 @@ def board_reset(choice):
                 board[0][j] = colors.BLUE + 'o' + colors.DEF
                 board[5][j] = colors.RED + 'x' + colors.DEF
 
-
-
-
 while True:
     choice = input("Select your color side (" + colors.RED + "Red" + " " + colors.BLUE + "Blue" + colors.DEF + ") --> ").lower()
     if choice == "red" or choice == "blue":
@@ -48,15 +43,12 @@ while True:
     else:
         print("Choose Red or Blue")
 
-
 m.board_show(board)
 
+rpoint = 0
+bpoint = 0
 
-count = 0
-
-
-while count <5 :
-    count = count + 1
+while True:
 
     print("YOUR TURN")
     board = m.player_board(choice , board)
@@ -69,5 +61,81 @@ while count <5 :
     time.sleep(2)
     board = ai.board_update(choice , board)
     print("COMPUTER IS DONE WITH IT'S TURN")
+
+    for j in range(6):
+        if board[0][j] == colors.RED + 'x' + colors.DEF:
+            rpoint += 1
+
+        if board[0][j] == colors.BLUE + 'o' + colors.DEF:
+            bpoint += 1
+
+    if choice == "red" and rpoint == 6:
+        print("\n Yay! You won.")
+        break
+
+    if choice == "red" and bpoint == 6:
+        print("\n Sorry! You lose.")
+        break
+
+    if choice == "blue" and bpoint == 6:
+        print("\n Yay! You won.")
+        break
+
+    if choice == "blue" and rpoint == 6:
+        print("\n Sorry! You lose.")
+        break
+
+    rcount = 0
+    bcount = 0
+    end = 0
+
+    for i in range(6):
+        for j in range(6):
+            if board[i][j] == colors.RED + 'x' + colors.DEF:
+                rcount += 1
+
+            if board[i][j] == colors.BLUE + 'o' + colors.DEF:
+                bcount += 1
+
+            if i != 0 and i != 5:
+                if board[i][j] == colors.DEF + '-':
+                    end += 1
+
+    if end == 24:
+        if choice == "red" and rcount > bcount:
+            print("\n Yay! You won.")
+            break
+
+        if choice == "blue" and rcount < bcount:
+            print("\n Yay! You won.")
+            break
+
+        if choice == "red" and rcount < bcount:
+            print("\n Sorry! You lose.")
+            break
+
+        if choice == "blue" and rcount > bcount:
+            print("\n Sorry! You lose.")
+            break
+
+        if rcount == bcount:
+            print("\nMatch Tied!")
+            break
+
+    if choice == "red" and rcount == 0:
+        print("\n Sorry! You lose.")
+        break
+
+    if choice == "blue" and bcount == 0:
+        print("\n Sorry! You lose.")
+        break
+
+    if choice == "red" and bcount == 0:
+        print("\n Yay! You won.")
+        break
+
+    if choice == "blue" and rcount == 0:
+        print("\n Yay! You won.")
+        break
 
     m.board_show(board)
