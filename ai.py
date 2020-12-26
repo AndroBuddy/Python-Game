@@ -46,9 +46,6 @@ def movement_kill_check(choice , board):
 
     while(update != True):
         
-        if c == 1 : 
-            c = c + 1
-
         end = time.time() 
 
         if (int(end - start) > 15):
