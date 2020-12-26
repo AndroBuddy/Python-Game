@@ -16,24 +16,44 @@ rows = {
     "f" : 5 ,
 }
 
+c = 0
+start = 0
+
 # Board updater
 def player_board(choice , board):
+    global c , start
+    c = 1
     update = False
     board1 = board 
+    start = time.time()
     while update == False:
         (board1 , update) = movement_kill_check(choice , board)
     return board1
 
 # Function for pawn movement and killing
 def movement_kill_check(choice , board):
+    global c , start 
     update = False
     while(update != True):
         try:
+            
+            end = time.time()
+            if (int(end - start) > 29):
+                return None
+
             row = input("Enter the row Letter : ").lower()
             i = rows[row]
             j = int(input("Enter the column number : "))
             j = j-1
             move = input("Enter 'left' or 'right' to move to the respective places : ").lower()
+
+            if i-1<0:
+                print("Choose Your move correctly")
+
+
+
+            if (int(end - start) > 29):
+                return None
 
             ## Pawn movement
             if choice == "blue" and board[i][j] == colors.BLUE+ 'o' + colors.DEF:
@@ -54,11 +74,11 @@ def movement_kill_check(choice , board):
                     elif move == "left":
                         ch = -1
                     else :
-                        print("Choose your move correctly ! ")
+                        print("Choose your move correctly ! \n")
                         continue
                     if board[i-1][j+ch] == colors.DEF + '-':
                         if (j+ch) <0 :
-                            print("CHOOSE YOUR MOVE CORRECTLY")
+                            print("CHOOSE YOUR MOVE CORRECTLY \n")
                             continue
                         board[i][j] = colors.DEF + '-'
                         board[i-1][j+ch] = colors.BLUE+ 'o' + colors.DEF
@@ -85,11 +105,11 @@ def movement_kill_check(choice , board):
                     elif move == "left":
                         ch = -1
                     else :
-                        print("Choose your move correctly ! ")
+                        print("Choose your move correctly ! \n")
                         continue
                     if board[i-1][j+ch] == colors.DEF + '-':
                         if (j+ch)< 0 :
-                            print("CHOOSE YOUR MOVE CORRECTLY")
+                            print("CHOOSE YOUR MOVE CORRECTLY \n")
                             continue
                         board[i][j] = colors.DEF + '-'
                         board[i-1][j+ch] = colors.RED+ 'x' + colors.DEF
@@ -100,30 +120,33 @@ def movement_kill_check(choice , board):
 
             # Kill cases
             if choice == "blue" and board[i][j] == colors.BLUE+ 'o' + colors.DEF:
-                    if board[i-1][j+1] == colors.RED+ 'x' + colors.DEF and board[i-2][j+2] == colors.DEF + '-' and move == "right":
-                        board[i][j] = colors.DEF + '-'
-                        board[i-1][j+1] = colors.DEF + '-'
-                        board[i-2][j+2] = colors.BLUE + 'o' + colors.DEF
-                        update = True
-                        continue
-                    elif board[i-1][j-1] == colors.RED+ 'x' + colors.DEF and board[i-2][j-2] == colors.DEF + '-' and move == "left" and j-1 >-1 and j-2 > -1:
+
+                    if board[i-1][j-1] == colors.RED+ 'x' + colors.DEF and board[i-2][j-2] == colors.DEF + '-' and move == "left" and j-1 >-1 and j-2 > -1:
                         board[i][j] = colors.DEF + '-'
                         board[i-1][j-1] = colors.DEF + '-'
                         board[i-2][j-2] = colors.BLUE + 'o' + colors.DEF
                         update = True
                         continue
-
-            elif choice == "red" and board[i][j] == colors.RED + 'x' + colors.DEF:
-                    if board[i-1][j+1] == colors.BLUE+ 'o' + colors.DEF and board[i-2][j+2] == colors.DEF + '-' and move == "right":
+                    elif board[i-1][j+1] == colors.RED+ 'x' + colors.DEF and board[i-2][j+2] == colors.DEF + '-' and move == "right":
                         board[i][j] = colors.DEF + '-'
                         board[i-1][j+1] = colors.DEF + '-'
-                        board[i-2][j+2] = colors.RED + 'x' + colors.DEF
+                        board[i-2][j+2] = colors.BLUE + 'o' + colors.DEF
                         update = True
                         continue
-                    elif board[i-1][j-1] == colors.BLUE+ 'o' + colors.DEF and board[i-2][j-2] == colors.DEF + '-' and move == "left" and j-1 >-1 and j-2 > -1:
+
+            elif choice == "red" and board[i][j] == colors.RED + 'x' + colors.DEF:
+
+                    if board[i-1][j-1] == colors.BLUE+ 'o' + colors.DEF and board[i-2][j-2] == colors.DEF + '-' and move == "left" and j-1 >-1 and j-2 > -1:
                         board[i][j] = colors.DEF + '-'
                         board[i-1][j-1] = colors.DEF + '-'
                         board[i-2][j-2] = colors.RED + 'x' + colors.DEF
+                        update = True
+                        continue
+
+                    elif board[i-1][j+1] == colors.BLUE+ 'o' + colors.DEF and board[i-2][j+2] == colors.DEF + '-' and move == "right":
+                        board[i][j] = colors.DEF + '-'
+                        board[i-1][j+1] = colors.DEF + '-'
+                        board[i-2][j+2] = colors.RED + 'x' + colors.DEF
                         update = True
                         continue
 
@@ -132,7 +155,8 @@ def movement_kill_check(choice , board):
                 print("CHOOSE YOUR MOVE CORECTLY")
                 continue
 
-        except : 
+        except Exception as e: 
+            print(e)
             update = False
             print("CHOOSE YOUR MOVE CORRECTLY !!!!")
             continue

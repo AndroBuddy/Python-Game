@@ -15,13 +15,34 @@ board= [[colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-',
         [colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-'],
         [colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-', colors.DEF + '-']]
 
+# empty = board.copy()
+
 if (os.name == "nt"):
     os.system("cls")
 if (os.name =="posix"):
     os.system("clear")
-print("BE SURE , YOU CANNOT MOVE BACKWARDS , SO CHOOSE YOUR MOVE WISELY !!!!!!!!!")
+
+
+print("===========================\n")
+print("WELCOME TO MINI CHECKERS \n")
+print("===========================\n")
+print("BEFORE STARTING REMEMBER FEW RULES \n")
+print("YOU CAN MOVE DIAGONALLY \n")
+print("YOU CAN KILL DIAGONALLY BY JUMPING OVER THE ENEMY \n")
+print("DON'T EXPECT TO GET A BONUS AFTER YOU KILL AN ENEMY \n")
+print("BE SURE , YOU CANNOT MOVE BACKWARDS , SO CHOOSE YOUR MOVE WISELY !!!!!!!!!\n ")
+print("ONCE YOU START THE GAME , YOU CAN'T EXIT , PLAY AT YOUR OWN RISK XD")
+print("THERE IS NO DRAW IN THIS GAME !!!!")
+print("GAME ENDS WHEN 3 PAWNS REACHES THE OTHER SIDE \n")
+print("GAME ENDS IF YOU ONLY HAVE 2 PAWNS LEFT \n")
+print("YOU HAVE A 30 SECONDS TIME LIMIT. IF YOU HAVE NO PLACE TO MOVE , YOU WILL AUTOMATICALLY LOSE")
+print("BONUS: COMPUTER IS NOT SO INTELLIGENT , IT WILL GET OUTWITTED IF YOU PLAY TOO WELL \n")
+print("BONUS: FIND LOOPHOLES TO DEFEAT THE COMPUTER...\n")
+print("ENJOY \n")
+
 
 choice = ""
+
 
 def board_reset(choice):
     global board
@@ -41,101 +62,184 @@ while True:
         board_reset(choice)
         break
     else:
-        print("Choose Red or Blue")
+        print("Choose Red or Blue\n")
 
 m.board_show(board)
 
-rpoint = 0
-bpoint = 0
+# rpoint = 0
+# bpoint = 0
 
-while True:
 
-    print("YOUR TURN")
-    board = m.player_board(choice , board)
-
+def clear():
     if (os.name == "nt"):
         os.system("cls")
     if (os.name =="posix"):
         os.system("clear")
-    print("COMPUTER IS THINKING ... ")
-    time.sleep(2)
-    board = ai.board_update(choice , board)
-    print("COMPUTER IS DONE WITH IT'S TURN")
 
-    for j in range(6):
-        if board[0][j] == colors.RED + 'x' + colors.DEF:
-            rpoint += 1
 
-        if board[0][j] == colors.BLUE + 'o' + colors.DEF:
-            bpoint += 1
+while True:
 
-    if choice == "red" and rpoint == 6:
-        print("\n Yay! You won.")
-        break
 
-    if choice == "red" and bpoint == 6:
-        print("\n Sorry! You lose.")
-        break
-
-    if choice == "blue" and bpoint == 6:
-        print("\n Yay! You won.")
-        break
-
-    if choice == "blue" and rpoint == 6:
-        print("\n Sorry! You lose.")
-        break
-
-    rcount = 0
-    bcount = 0
-    end = 0
-
-    for i in range(6):
+    player_pawn = 0
+    comp_pawn = 0
+    for i in range (6):
         for j in range(6):
-            if board[i][j] == colors.RED + 'x' + colors.DEF:
-                rcount += 1
+            if choice == "blue":
+                if board[i][j] == colors.BLUE + "o" + colors.DEF:
+                    player_pawn = player_pawn + 1
+                if board[i][j] == colors.RED + "x" + colors.DEF:
+                    comp_pawn = comp_pawn + 1
+            if choice == "blue":
+                if board[i][j] == colors.RED + "x" + colors.DEF:
+                    player_pawn = player_pawn + 1
+                if board[i][j] == colors.BLUE + "o" + colors.DEF:
+                    comp_pawn = comp_pawn + 1
 
-            if board[i][j] == colors.BLUE + 'o' + colors.DEF:
-                bcount += 1
 
-            if i != 0 and i != 5:
-                if board[i][j] == colors.DEF + '-':
-                    end += 1
-
-    if end == 24:
-        if choice == "red" and rcount > bcount:
-            print("\n Yay! You won.")
-            break
-
-        if choice == "blue" and rcount < bcount:
-            print("\n Yay! You won.")
-            break
-
-        if choice == "red" and rcount < bcount:
-            print("\n Sorry! You lose.")
-            break
-
-        if choice == "blue" and rcount > bcount:
-            print("\n Sorry! You lose.")
-            break
-
-        if rcount == bcount:
-            print("\nMatch Tied!")
-            break
-
-    if choice == "red" and rcount == 0:
-        print("\n Sorry! You lose.")
+    if player_pawn == 2 :
+        print("YOU LOSE , COMPUTER WINS !!")
+        break
+    elif comp_pawn == 2 :
+        print("YOU WIN , CONGRATS !!")
         break
 
-    if choice == "blue" and bcount == 0:
-        print("\n Sorry! You lose.")
+    print("YOUR TURN\n \n ")
+    try:
+        board = m.player_board(choice , board)
+    except:
+        print("YOU LOSE !!!!!!!!!! \nYOU HAVE EXCEEDED 30 SECONDS , MAYBE YOU NEVER HAD A CHANCE")
         break
 
-    if choice == "red" and bcount == 0:
-        print("\n Yay! You won.")
-        break
 
-    if choice == "blue" and rcount == 0:
-        print("\n Yay! You won.")
-        break
+    clear()
 
     m.board_show(board)
+    print("\n")
+
+
+
+    
+    print("COMPUTER IS THINKING ...\n \n ")
+    time.sleep(2)
+    
+
+    try:
+        board = ai.board_update(choice , board)
+    except Exception as e:
+        print("YOU WIN !!! YOU HAVE OUTWITTED COMPUTER")
+        break
+
+    clear()
+    print("COMPUTER IS DONE WITH IT'S TURN \n \n")
+    m.board_show(board)
+    print("\n")
+
+    player = 0
+    comp = 0
+
+    for j in range(6):
+        if choice == "blue":
+            if board[0][j] == colors.BLUE + "o" + colors.DEF:
+                player = player+1
+            if board[5][j] == colors.RED + "x" + colors.DEF:
+                comp = comp+1
+        if choice == "red":
+            if board[0][j] == colors.RED + "x" + colors.DEF:
+                player = player+1
+            if board[5][j] == colors.BLUE + "o" + colors.DEF:
+                comp = comp+1
+
+
+    if player == 3:
+        clear()
+        m.board_show(board)
+        print("YOU WIN , CONGRATS !! \n")
+        break
+    if comp == 3:
+        clear()
+        m.board_show(board)
+        print("YOU LOSE , COMPUTER WINS \n")
+        break
+
+
+
+        
+
+
+    # for j in range(6):
+    #     if board[0][j] == colors.RED + 'x' + colors.DEF:
+    #         rpoint += 1
+
+    #     if board[0][j] == colors.BLUE + 'o' + colors.DEF:
+    #         bpoint += 1
+
+    # if choice == "red" and rpoint == 6:
+    #     print("\n Yay! You won.")
+    #     break
+
+    # if choice == "red" and bpoint == 6:
+    #     print("\n Sorry! You lose.")
+    #     break
+
+    # if choice == "blue" and bpoint == 6:
+    #     print("\n Yay! You won.")
+    #     break
+
+    # if choice == "blue" and rpoint == 6:
+    #     print("\n Sorry! You lose.")
+    #     break
+
+    # rcount = 0
+    # bcount = 0
+    # end = 0
+
+    # for i in range(6):
+    #     for j in range(6):
+    #         if board[i][j] == colors.RED + 'x' + colors.DEF:
+    #             rcount += 1
+
+    #         if board[i][j] == colors.BLUE + 'o' + colors.DEF:
+    #             bcount += 1
+
+    #         if i != 0 and i != 5:
+    #             if board[i][j] == colors.DEF + '-':
+    #                 end += 1
+
+    # if end == 24:
+    #     if choice == "red" and rcount > bcount:
+    #         print("\n Yay! You won.")
+    #         break
+
+    #     if choice == "blue" and rcount < bcount:
+    #         print("\n Yay! You won.")
+    #         break
+
+    #     if choice == "red" and rcount < bcount:
+    #         print("\n Sorry! You lose.")
+    #         break
+
+    #     if choice == "blue" and rcount > bcount:
+    #         print("\n Sorry! You lose.")
+    #         break
+
+    #     if rcount == bcount:
+    #         print("\nMatch Tied!")
+    #         break
+
+    # if choice == "red" and rcount == 0:
+    #     print("\n Sorry! You lose.")
+    #     break
+
+    # if choice == "blue" and bcount == 0:
+    #     print("\n Sorry! You lose.")
+    #     break
+
+    # if choice == "red" and bcount == 0:
+    #     print("\n Yay! You won.")
+    #     break
+
+    # if choice == "blue" and rcount == 0:
+    #     print("\n Yay! You won.")
+    #     break
+
+    
