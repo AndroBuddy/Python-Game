@@ -32,13 +32,13 @@ def player_board(choice , board):
 
 # Function for pawn movement and killing
 def movement_kill_check(choice , board):
-    global c , start 
+    global c ,start 
     update = False
     while(update != True):
         try:
-            
+
             end = time.time()
-            if (int(end - start) > 29):
+            if (int(end - start) > 29) :
                 return None
 
             row = input("Enter the row Letter : ").lower()
