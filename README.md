@@ -1,9 +1,17 @@
 # Python Mini Checkers
 
+Brought to you by Anirudh, Jahnavi and Rounak
+
 ## The enjoyable game of checkers in a mini version written in python
 
 - This is a human VS machine game with two sides: Red and Blue
 - Choose your playing color; Red starts first!
+
+## How to play
+
+- On windows, just run the driver.py
+- On linux
+``` python3 driver.py ```
 
 ### Rules to play
 
