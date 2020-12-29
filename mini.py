@@ -49,6 +49,7 @@ def movement_kill_check(choice , board):
 
             if i-1<0:
                 print("Choose Your move correctly")
+                continue
 
 
 
@@ -122,33 +123,49 @@ def movement_kill_check(choice , board):
             if choice == "blue" and board[i][j] == colors.BLUE+ 'o' + colors.DEF:
 
                     if board[i-1][j-1] == colors.RED+ 'x' + colors.DEF and board[i-2][j-2] == colors.DEF + '-' and move == "left" and j-1 >-1 and j-2 > -1:
-                        board[i][j] = colors.DEF + '-'
-                        board[i-1][j-1] = colors.DEF + '-'
-                        board[i-2][j-2] = colors.BLUE + 'o' + colors.DEF
-                        update = True
-                        continue
+                        if i-2 < 0:
+                            print("Choose your move correctly ")
+                            continue
+                        else:
+                            board[i][j] = colors.DEF + '-'
+                            board[i-1][j-1] = colors.DEF + '-'
+                            board[i-2][j-2] = colors.BLUE + 'o' + colors.DEF
+                            update = True
+                            continue
                     elif board[i-1][j+1] == colors.RED+ 'x' + colors.DEF and board[i-2][j+2] == colors.DEF + '-' and move == "right":
-                        board[i][j] = colors.DEF + '-'
-                        board[i-1][j+1] = colors.DEF + '-'
-                        board[i-2][j+2] = colors.BLUE + 'o' + colors.DEF
-                        update = True
-                        continue
+                        if i-2 < 0 :
+                            print("Choose your move correctly ")
+                            continue
+                        else:
+                            board[i][j] = colors.DEF + '-'
+                            board[i-1][j+1] = colors.DEF + '-'
+                            board[i-2][j+2] = colors.BLUE + 'o' + colors.DEF
+                            update = True
+                            continue
 
             elif choice == "red" and board[i][j] == colors.RED + 'x' + colors.DEF:
 
                     if board[i-1][j-1] == colors.BLUE+ 'o' + colors.DEF and board[i-2][j-2] == colors.DEF + '-' and move == "left" and j-1 >-1 and j-2 > -1:
-                        board[i][j] = colors.DEF + '-'
-                        board[i-1][j-1] = colors.DEF + '-'
-                        board[i-2][j-2] = colors.RED + 'x' + colors.DEF
-                        update = True
-                        continue
+                        if i-2 < 0 and j-2 < 0 :
+                            print("Choose your move correctly ")
+                            continue
+                        else:
+                            board[i][j] = colors.DEF + '-'
+                            board[i-1][j-1] = colors.DEF + '-'
+                            board[i-2][j-2] = colors.RED + 'x' + colors.DEF
+                            update = True
+                            continue
 
                     elif board[i-1][j+1] == colors.BLUE+ 'o' + colors.DEF and board[i-2][j+2] == colors.DEF + '-' and move == "right":
-                        board[i][j] = colors.DEF + '-'
-                        board[i-1][j+1] = colors.DEF + '-'
-                        board[i-2][j+2] = colors.RED + 'x' + colors.DEF
-                        update = True
-                        continue
+                        if i-2 < 0 :
+                            print("Choose your move correctly ")
+                            continue
+                        else:
+                            board[i][j] = colors.DEF + '-'
+                            board[i-1][j+1] = colors.DEF + '-'
+                            board[i-2][j+2] = colors.RED + 'x' + colors.DEF
+                            update = True
+                            continue
 
             else:
                 update = False
@@ -156,7 +173,6 @@ def movement_kill_check(choice , board):
                 continue
 
         except Exception as e: 
-            print(e)
             update = False
             print("CHOOSE YOUR MOVE CORRECTLY !!!!")
             continue

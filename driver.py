@@ -35,7 +35,7 @@ print("ONCE YOU START THE GAME , YOU CAN'T EXIT , PLAY AT YOUR OWN RISK XD")
 print("THERE IS NO DRAW IN THIS GAME !!!!")
 print("GAME ENDS WHEN 3 PAWNS REACHES THE OTHER SIDE \n")
 print("GAME ENDS IF YOU ONLY HAVE 2 PAWNS LEFT \n")
-print("YOU HAVE A 30 SECONDS TIME LIMIT. IF YOU HAVE NO PLACE TO MOVE , YOU WILL AUTOMATICALLY LOSE")
+# print("YOU HAVE A 30 SECONDS TIME LIMIT. IF YOU HAVE NO PLACE TO MOVE , YOU WILL AUTOMATICALLY LOSE")
 print("BONUS: COMPUTER IS NOT SO INTELLIGENT , IT WILL GET OUTWITTED IF YOU PLAY TOO WELL \n")
 print("BONUS: FIND LOOPHOLES TO DEFEAT THE COMPUTER...\n")
 print("ENJOY \n")
@@ -89,7 +89,7 @@ while True:
                     player_pawn = player_pawn + 1
                 if board[i][j] == colors.RED + "x" + colors.DEF:
                     comp_pawn = comp_pawn + 1
-            if choice == "blue":
+            if choice == "red":
                 if board[i][j] == colors.RED + "x" + colors.DEF:
                     player_pawn = player_pawn + 1
                 if board[i][j] == colors.BLUE + "o" + colors.DEF:

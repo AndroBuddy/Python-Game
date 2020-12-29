@@ -171,7 +171,6 @@ def movement_kill_check(choice , board):
                         continue
                     
         except Exception as e:
-            print(e)
             update = False
             continue
 
